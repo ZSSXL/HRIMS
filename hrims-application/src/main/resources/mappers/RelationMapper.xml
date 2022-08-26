@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.RelationMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.Relation">
+
+        <id property="id" column="id"/>
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+    <resultMap id="RelationMap" type="com.zss.hrims.model.bo.RelationBO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="relationId" column="relation_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, key, value
+    </sql>
+
+    <select id="selectKeyByValue" resultType="java.lang.String" parameterType="String">
+        select key
+        from hri_relation
+        where value = #{value}
+    </select>
+    <select id="selectValuesByKey" resultType="java.lang.String" parameterType="String">
+        select value
+        from hri_relation
+        where key = #{key}
+    </select>
+    <select id="queryU2E" resultType="com.zss.hrims.model.bo.RelationBO">
+        select he.id, he.name, hr.id as relation_id
+        from hri_enterprise he,
+             hri_relation hr
+        where he.id = hr.value
+          and hr.key = #{key}
+    </select>
+    <select id="queryE2C" resultType="com.zss.hrims.model.bo.RelationBO">
+        select hc.id, hc.name, hr.id as relation_id
+        from hri_candidate hc,
+             hri_relation hr
+        where hc.id = hr.value
+          and hr.key = #{key}
+    </select>
+</mapper>

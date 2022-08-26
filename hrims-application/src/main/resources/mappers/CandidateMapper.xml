@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.CandidateMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.Candidate">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="phone" column="phone"/>
+        <result property="postId" column="post_id"/>
+        <result property="graduationTime" column="graduation_time"/>
+        <result property="graduationSchool" column="graduation_school"/>
+        <result property="education" column="education"/>
+        <result property="specialized" column="specialized"/>
+        <result property="enrollmentModel" column="enrollment_model"/>
+        <result property="years" column="years"/>
+        <result property="skill" column="skill"/>
+        <result property="rating" column="rating"/>
+        <result property="educationalVerify" column="education_verify"/>
+        <result property="conclusion" column="conclusion"/>
+        <result property="resumeSource" column="resume_source"/>
+        <result property="state" column="state"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="CandidateSimpleMap" type="com.zss.hrims.model.bo.CandidateSimpleBO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="post" column="post"/>
+        <result property="graduationTime" column="graduation_time"/>
+        <result property="enterprise" column="enterprise"/>
+        <result property="rating" column="rating"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="Candidate_Simple_map">
+        c.id, c.name, c.phone, c.graduation_time, p.name as post, c.rating, c.state,  r.name as enterprise
+    </sql>
+    <select id="selectCandSimple" resultType="com.zss.hrims.model.bo.CandidateSimpleBO">
+        select
+        <include refid="Candidate_Simple_map"/>
+        from hri_candidate c,
+        hri_post p,
+        (select r.value, e.name
+        from hri_enterprise e,
+        hri_relation r
+        where e.id = r.key) r
+        where c.post_id = p.id
+        and c.name like #{name}
+        <if test="rating != null and rating gt 0">
+            and c.rating = #{rating}
+        </if>
+        <if test="work != null">
+            <if test="work">
+                and length(c.entry_date) &gt; 0
+            </if>
+            <if test="!work">
+                and length(c.entry_date) &lt;= 0
+            </if>
+        </if>
+        <if test="candIdList != null and !candIdList.isEmpty()">
+            and c.id in
+            <foreach item="item" index="index" collection="candIdList" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and c.id = r.value
+        and c.create_time between #{startTime} and #{endTime}
+        order by c.create_time desc
+    </select>
+    <select id="countCandByState" resultType="java.lang.Integer">
+        select count(*)
+        from hri_candidate
+        where post_id = #{postId}
+          and id in (
+            select value
+            from hri_relation
+            where key = #{entId})
+          and state = #{code}
+    </select>
+</mapper>

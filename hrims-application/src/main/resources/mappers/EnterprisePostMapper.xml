@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.EnterprisePostMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.EnterprisePost">
+        <id property="id" column="id"/>
+        <result property="enterpriseId" column="enterprise_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="ageLimit" column="age_limit"/>
+        <result property="demand" column="demand"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <resultMap id="EntPostBO" type="com.zss.hrims.model.bo.EntPostBO">
+        <result property="postId" column="post_id"/>
+        <result property="postName" column="post_name"/>
+        <result property="ageLimit" column="age_limit"/>
+        <result property="demand" column="demand"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, enterprise_id, post_id, age_limit, demand, create_time
+    </sql>
+
+    <sql id="Ent_Post_BO">
+        ep.post_id, ep.demand, ep.age_limit, p.name as post_name
+    </sql>
+    <select id="selectPostByEntId" resultType="com.zss.hrims.model.bo.EntPostBO" parameterType="String">
+        select
+        <include refid="Ent_Post_BO"/>
+        from hri_enterprise_post ep, hri_post p
+        where ep.post_id = p.id
+        and ep.enterprise_id = #{entId};
+    </select>
+
+
+</mapper>

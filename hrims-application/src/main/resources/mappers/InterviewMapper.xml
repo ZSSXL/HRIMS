@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.InterviewMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.Interview">
+
+        <id property="id" column="id"/>
+        <result property="candidateId" column="candidate_id"/>
+        <result property="rounds" column="rounds"/>
+        <result property="interviewTime" column="interview_time"/>
+        <result property="state" column="state"/>
+        <result property="hrInterviewAdvice" column="hr_interview_advice"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, candiate_id, rounds, interview_time, state, hr_interview_advice, create_time
+    </sql>
+    <select id="selectNewestState" resultType="java.lang.String" parameterType="String">
+        select state
+        from hri_interview
+        where candidate_id = #{candidateId}
+        limit 1
+    </select>
+</mapper>

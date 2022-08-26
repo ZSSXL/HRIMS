@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.AttachmentMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.Attachment">
+        <id property="id" column="id"/>
+        <result property="key" column="key"/>
+        <result property="fullPath" column="full_path"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <resultMap id="AttachmentSimpleMap" type="com.zss.hrims.model.bo.AttachmentBO">
+        <id property="id" column="id"/>
+        <result property="fullPath" column="full_path"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, key, full_path, create_time
+    </sql>
+    <sql id="Simple_Attachment_list">
+        id, full_path
+    </sql>
+    <select id="queryFullPathByKey" resultType="java.lang.String" parameterType="String">
+        select full_path
+        from hri_attachment
+        where key = #{key}
+    </select>
+
+    <select id="selectByKey" resultType="com.zss.hrims.model.bo.AttachmentBO" parameterType="String">
+        select
+        <include refid="Simple_Attachment_list"/>
+        from hri_attachment
+        where key = #{key}
+        order by create_time
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.ResumeSourceMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.ResumeSource">
+        <id property="id" column="id"/>
+        <result property="source" column="source"/>
+        <result property="alias" column="alias"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="ResumeSourceBO" type="com.zss.hrims.model.bo.ResumeSourceBO">
+        <result property="source" column="source"/>
+        <result property="alias" column="alias"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, source, alias, create_time
+    </sql>
+
+    <sql id="Resume_Source_BO">
+        source, alias
+    </sql>
+
+    <select id="selectResumeSource" resultType="com.zss.hrims.model.bo.ResumeSourceBO">
+        select
+        <include refid="Resume_Source_BO"/>
+        from hri_resume_source
+        order by create_time;
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zss.hrims.mapper.SystemUserMapper">
+    <resultMap id="BaseResultMap" type="com.zss.hrims.model.entity.SystemUser">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, username, password, email, create_time
+    </sql>
+
+    <select id="queryUsernameById" resultType="String" parameterType="String">
+        select username
+        from hri_system_user
+        where user_id = #{userId}
+    </select>
+</mapper>

@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: hrims
+  servlet:
+    multipart:
+      max-file-size: 32MB
+      max-request-size: 64MB
+
+server:
+  port: 8016
